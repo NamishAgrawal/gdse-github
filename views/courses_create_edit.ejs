@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('../views/partials/heads.ejs'); %>
+  </head>
+  <body>
+    <%- include('../views/partials/header.ejs'); %>
+    <h1 class="my-3 fw-bolder"><%= title %></h1>
+    <div class="container-fluid my-3">
+        <div class="row">
+            <div class="col-12 col-sm-8">
+                <h3>Existing Courses</h3>
+                <table class="table table-striped">
+                    <thead class="table-dark">
+                      <tr>
+                        <th>Name</th>
+                        <th>Section</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for (const course of courses) { %>
+                      <tr>
+                          <td><%= course.name %></td>
+                          <td><%= course.section %></td>
+                          <td><button type="button" class="btn btn-primary btn-sm" onclick="setForm('<%= course.id %>', '<%= course.name %>', '<%= course.section %>', '<%= course.description %>')">Edit</button></td>
+                      </tr>
+                      <% } %>
+                    </tbody>
+                  </table>
+            </div>
+            <div class="col-12 col-sm-4">
+              <form action="/courses_create_edit" method="post">
+                <div class="form-group pt-3">
+                  <label for="name" class="form-label">Course Name (required)</label>
+                  <input autocomplete="off" autofocus class="form-control" id="name" name="name" placeholder="Course name" type="text" required>
+                </div>
+                <div class="form-group pt-3">
+                  <label for="section" class="form-label">Course Section</label>
+                  <input class="form-control" id="section" name="section" placeholder="Section" type="text">
+                </div>
+                <div class="form-group pt-3">
+                  <label for="description" class="form-label">Course Description</label>
+                  <input class="form-control" id="description" name="description" placeholder="Description" type="text">
+                </div>
+                <input type="hidden" id="courseid" name="id" value="0">
+                <button class="btn btn-primary mt-3" id="btnSubmit" type="submit">Create Course</button>
+                <button type="button" id="cancel" class="btn btn-danger mt-3" style="display: none" onclick="cancelForm()">Cancel</button>
+            </form>
+            </div>
+        </div>
+    </div>
+    <%- include('../views/partials/footer.ejs'); %>
+    <script>
+      const setForm = (courseId, name, section, description) => {
+        document.getElementById("cancel").style.display = "block";
+        document.getElementById('btnSubmit').innerHTML = 'Edit Course';
+        document.getElementById('courseid').value = courseId;
+        document.getElementById('name').value = name;
+        document.getElementById('section').value = section;
+        document.getElementById('description').value = description;
+      }
+
+      const cancelForm = () => {
+        console.log("Hello, workld");
+        document.getElementById("cancel").style.display = "none";
+        document.getElementById('btnSubmit').innerHTML = 'Create Course';
+        document.getElementById('courseid').value = 0;
+        document.getElementById('name').value = "";
+        document.getElementById('section').value = "";
+        document.getElementById('description').value = "";
+      }
+    </script>
+  </body>
+</html>

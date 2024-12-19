@@ -1,0 +1,27 @@
+{
+  "name": "node-gclassroom",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon ./bin/www"
+  },
+  "dependencies": {
+    "axion": "^0.1.0",
+    "axios": "^0.21.4",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.8",
+    "env": "^0.0.2",
+    "express": "~4.16.1",
+    "express-session": "^1.18.1",
+    "google-auth-library": "^9.15.0",
+    "googleapis": "^103.0.0",
+    "http-errors": "~1.6.3",
+    "md5": "^2.3.0",
+    "morgan": "~1.9.1",
+    "node-schedule": "^2.1.0",
+    "nodemon": "^2.0.12",
+    "sqlite3": "^5.0.8"
+  }
+}

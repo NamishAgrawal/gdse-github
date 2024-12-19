@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('../views/partials/heads.ejs'); %>
+  </head>
+  <body>
+    <%- include('../views/partials/header.ejs'); %>
+
+    <div class="container">
+        <div class="row">
+          <h1 class="my-3 fw-bolder"><%= title %></h1>
+        </div>
+        <button type="button" class="btn btn-primary my-3" data-bs-toggle="modal" data-bs-target="#createcoursework">
+          Create Coursework
+        </button>
+        <!-- Modal -->
+        <div class="modal fade" id="createcoursework" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Create Coursework</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <form action="/courseworks/create_coursework" method="post">
+              <div class="modal-body">
+                
+                  <div class="mb-3">
+                    <label  class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="title">
+                  </div>
+                  <div class="mb-3">
+                    <label  class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="5"></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label  class="form-label">Due Date</label>
+                    <input type="number" id="day" name="day" placeholder="dd" min="1" max="31" step="1">/<input type="number"  id="month" name="month" placeholder="mm" min="1" max="12" step="1">/<input type="number" id="year" name="year" placeholder="yyyy" min="2022" max="3000" step="1">
+                  </div>
+
+                  <div class="mb-3">
+                    <label  class="form-label">Due Time</label>
+                    <input type="number" id="hour" name="hour" min="0" max="24" step="1">:<input type="number" id="minute" name="minute" min="0" max="59" step="1">
+                  </div>
+
+                  <div class="mb-3">
+                    <label  class="form-label">Maximum Grade</label>
+                    <input type="number" class="form-control" id="maxPoints" name="maxPoints" step="1">
+                  </div>
+
+                  <div class="mb-3">
+                    <label  class="form-label">Type</label>
+                    <select class="form-control" id="type" name="type">
+                      <option value="ASSIGNMENT">Assignment</option>
+                      <option value="SHORT_ANSWER_QUESTION">Short Answer Question</option>
+                    </select>
+                  </div>
+                
+              </div>
+              <input type="hidden" class="form-control" id="courseId" name="courseId" value=<%= courseId %> >
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Create Coursework</button>
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+
+        <% for (const coursework of courseworks) { %>
+          <div class="card">
+            <div class="row my-3">
+              <div class="col-4">
+                <div class="card-body">
+                  <h3 class="card-title">Title: <%= coursework.title %></h5>
+                  <h6 class="card-subtitle mb-2 text-muted">Type: <%= coursework.workType %></h6>
+                  <h6 class="card-subtitle mb-2 text-muted">State: <%= coursework.state %></h6>
+                  <h6 class="card-subtitle mb-2 text-muted">Due Date: <% if (coursework.dueDate !== undefined) { %><%= coursework.dueDate.day %>/<%= coursework.dueDate.month %>/<%= coursework.dueDate.year %> <% if (coursework.dueTime.hours !== undefined) { %><%= coursework.dueTime.hours + 7 %>:<% if (coursework.dueTime.minutes !== undefined) { %><%= coursework.dueTime.minutes %><% } %><% if (coursework.dueTime.minutes == undefined) { %>00<% } %><% } %><% } %></h6>
+                  <h6 class="card-subtitle mb-2 text-muted">Creation Time: <%= coursework.creationTime %></h6>
+                  <h6 class="card-subtitle mb-2 text-muted">Last Update Time: <%= coursework.updateTime %></h6>
+                  <h6 class="card-subtitle mb-2 text-muted">Max Point: <%= coursework.maxPoints %></h6>
+                </div>
+              </div>
+              <div class="col-4 mt-3">
+                <div class="card-body">
+                  <h4 class="card-subtitle mb-2 ">Assigned: <%= coursework.assigned %></h4>
+                </div>
+              </div>
+              <div class="col-4 mt-3">
+                <div class="card-body">
+                  <h4 class="card-subtitle mb-2 ">Turned In: <%= coursework.turnedin %></h4>
+                </div>
+              </div>
+            </div>
+            <% if (coursework.dueDate !== undefined) { %>
+            <div class="row mx-2 my-3">
+              <div class="col-4">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#autograde">
+                  Auto Grade
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="autograde" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Auto Grade</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <form action="/courseworks/autograde" method="post">
+                      <div class="modal-body">
+                        
+                          <div class="mb-3">
+                            <label for="Grade when submitted in time" class="form-label">Grade when submitted by the due date</label>
+                            <input type="number" class="form-control" id="intime" name="intime" min="0" max=<%= coursework.maxPoints %> autofocus required>
+                          <div class="my-3">
+                            <label for="Grade when submitted late" class="form-label">Grade when submitted late by <input type="datetime-local" class="form-control" id="date" name="date" required></label>
+                            <input type="number" class="form-control" id="late" name="late" min="0" max=<%= coursework.maxPoints %> required>
+                          </div>
+                          <input type="hidden" class="form-control" id="courseId" name="courseId" value=<%= courseId %> >
+                          <input type="hidden" class="form-control" id="courseworkId" name="courseworkId" value=<%= coursework.id %> > 
+                        
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Enable Auto Grade</button>
+                      </div>
+                    </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <% } %>
+          </div>
+
+        </div>
+        <% } %>
+    </div>
+    <%- include('../views/partials/footer.ejs'); %>
+  </body>
+</html>

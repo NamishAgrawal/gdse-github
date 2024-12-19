@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('../views/partials/heads.ejs'); %>
+  </head>
+  <body>
+    <%- include('../views/partials/header.ejs'); %>
+    <div class="container-fluid my-3">
+      <div class="row my-3">
+        <div class="col-12 col-sm-3">
+          <form action='/change_account' method='post'>
+            <button type="submit" class="btn btn-primary">Change Account</button>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-sm-3">
+          <div class="card" style="width: 18rem;">
+            <div class="card-header fw-bold">
+              Courses
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><a href="/courses">View courses</a></li>
+              <li class="list-group-item"><a href="/courses_create_edit">Create/Edit courses</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  <%- include('../views/partials/footer.ejs'); %>
+  </body>
+</html>
